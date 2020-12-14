@@ -41,7 +41,7 @@ defBaseline <- 21
 #get most recent date data is available since data are published Thursdays at 5pm
 
 most_recent_sunday<-cut(Sys.Date(),breaks='week',start.on.monday=F)
-most_recent_thursday<-as.Date(most_recent_sunday)+4
+most_recent_thursday<-as.Date(most_recent_sunday)-3
 file_format<-format(most_recent_thursday,"%Y-%m-%d")
 file_format_out<-format(most_recent_thursday,"%m/%d/%Y")
 data_file_ma   <- paste0('data/ma_state_weeky_re_data_', file_format, '.csv')
@@ -55,15 +55,16 @@ ma_url<-paste0('https://www.mass.gov/doc/weekly-public-health-report-raw-data-',
   response_ma <- try(httr::GET(url = ma_url,
                                     authenticate(':', ':', type='ntlm'),
                                     config(timeout = 20),
-                                    write_disk('data/temp.xslx', overwrite = TRUE)))
+                                    write_disk('data/temp.xlsx', overwrite = TRUE)))
 #}
 
 #get just the race/ethnicity tab from the weekly excel spreadsheet
 #if (!file.exists(data_file_ma)) {
-race_ethnicity_data_ma <- read_excel('data/temp.xslx', sheet = "RaceEthnicity")
+
+race_ethnicity_data_ma <- read_excel("data/temp.xlsx",sheet="RaceEthnicity")
 write.csv(race_ethnicity_data_ma,data_file_ma)
 
-file.remove('data/temp.xslx')
+file.remove('data/temp.xlsx')
 #}else{
  # race_ethnicity_data_ma<-read.csv(data_file_ma)
 #}
@@ -281,13 +282,13 @@ p <- ggplot(txfmwk, aes(x=lubridate::ymd( "2020-01-01" ) + lubridate::weeks( Wee
   geom_line( aes(y=Asian_wk_death*asian_adjust,color="Asian")) +
   geom_line( aes(y=White_wk_death*white_adjust,color="White")) +
   geom_vline( aes(xintercept=as.Date("2020-09-02",color="black"))) +
-  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Probable Case Definition Changes", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-08",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=.75), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 2 Step I Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-19",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=.75), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 2 Step II Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-07-06",color="black"))) +
-  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=.75), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step I Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-10-05",color="black"))) +
   geom_text(aes(x=as.Date("2020-10-03",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=.75), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-09-16",color="black"))) +
@@ -315,13 +316,13 @@ casesp <- ggplot(txfmwk, aes(x=lubridate::ymd( "2020-01-01" ) + lubridate::weeks
   geom_line( aes(y=Asian_wk_cases*asian_adjust,color="Asian")) +
   geom_line( aes(y=White_wk_cases*white_adjust,color="White")) +
   geom_vline( aes(xintercept=as.Date("2020-09-02",color="black"))) +
-  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=100), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Probable Case Definition Changes", y=100), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-08",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=100), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 2 Step I Begins", y=100), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-19",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=100), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 2 Step II Begins", y=100), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-07-06",color="black"))) +
-  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=100), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step I Begins", y=100), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-10-05",color="black"))) +
   geom_text(aes(x=as.Date("2020-10-03",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=100), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-09-16",color="black"))) +
@@ -350,23 +351,23 @@ hospp <- ggplot(txfmwk, aes(x=lubridate::ymd( "2020-01-01" ) + lubridate::weeks(
   geom_line( aes(y=Asian_wk_hosp*asian_adjust,color="Asian") )+
   geom_line( aes(y=White_wk_hosp*white_adjust,color="White")) +
   geom_vline( aes(xintercept=as.Date("2020-09-02",color="black"))) +
-  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-08-31",family=sans,fontface=plain,size=10), label="Probable Case Definition Changes", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-08",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-06",family=sans,fontface=plain,size=10), label="Phase 2 Step I Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-06-19",color="black"))) +
-  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-06-17",family=sans,fontface=plain,size=10), label="Phase 2 Step II Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-07-06",color="black"))) +
-  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90)+
+  geom_text(aes(x=as.Date("2020-07-04",family=sans,fontface=plain,size=10), label="Phase 3 Step I Begins", y=.75), colour="black", angle=90)+
   geom_vline( aes(xintercept=as.Date("2020-10-05",color="black"))) +
-  geom_text(aes(x=as.Date("2020-10-03",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=1), colour="black", angle=90) +
+  geom_text(aes(x=as.Date("2020-10-03",family=sans,fontface=plain,size=10), label="Phase 3 Step II Begins", y=.75), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-09-16",color="black"))) +
-  geom_text(aes(x=as.Date("2020-09-14",family=sans,fontface=plain,size=10), label="Public K-12 Schools Start", y=1), colour="black", angle=90) +
+  geom_text(aes(x=as.Date("2020-09-14",family=sans,fontface=plain,size=10), label="Public K-12 Schools Start", y=.75), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-09-16",color="black"))) +
-  geom_text(aes(x=as.Date("2020-09-14",family=sans,fontface=plain,size=10), label="Public K-12 Schools Start", y=1), colour="black", angle=90) +
+  geom_text(aes(x=as.Date("2020-09-14",family=sans,fontface=plain,size=10), label="Public K-12 Schools Start", y=.75), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-08-16",color="black"))) +
-  geom_text(aes(x=as.Date("2020-08-14",family=sans,fontface=plain,size=10), label="College Move In Begins", y=1), colour="black", angle=90) +
+  geom_text(aes(x=as.Date("2020-08-14",family=sans,fontface=plain,size=10), label="College Move In Begins",y=.75), colour="black", angle=90) +
   geom_vline( aes(xintercept=as.Date("2020-11-25",color="black"))) +
-  geom_text(aes(x=as.Date("2020-11-23",family=sans,fontface=plain,size=10), label="Thanksgiving", y=1), colour="black", angle=90) +
+  geom_text(aes(x=as.Date("2020-11-23",family=sans,fontface=plain,size=10), label="Thanksgiving",y=.75), colour="black", angle=90) +
   
     labs(x = "",y="weekly ever hospitalized",
        title = "Avg Weekly COVID-19 Ever Hospitalized \n(Adjusted for cohort by 100,000 persons)",
